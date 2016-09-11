@@ -15,13 +15,15 @@ public class Meal {
 
     private int calories;
 
-    private int id;
+    private static volatile int count;
+    private final int id;
 
-    public Meal(LocalDateTime dateTime, String description, int calories, int id) {
+    public Meal(LocalDateTime dateTime, String description, int calories) {
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
-        this.id = id;
+        this.id = count;
+        count++;
     }
 
     public LocalDateTime getDateTime() {
@@ -44,6 +46,10 @@ public class Meal {
         return dateTime.toLocalTime();
     }
 
+    public int getId() {
+        return id;
+    }
+
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
@@ -56,17 +62,13 @@ public class Meal {
         this.calories = calories;
     }
 
-    public int getId() {
-        return id;
-    }
-
-
     @Override
     public String toString() {
         return "Meal{" +
                 "dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
+                ", id=" + id +
                 '}';
     }
 }

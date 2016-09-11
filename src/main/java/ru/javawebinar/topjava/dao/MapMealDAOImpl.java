@@ -6,17 +6,14 @@ import ru.javawebinar.topjava.repository.MockDB;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class MapMealDAOImpl implements MealDAO {
     private static MockDB mockDB = MockDB.getInstance();
 
-    private static AtomicInteger integer = new AtomicInteger(0);
-
     @Override
     public void createMeal(LocalDateTime dateTime, String description, int calories) {
-        Meal meal = new Meal(dateTime, description, calories, integer.get());
+        Meal meal = new Meal(dateTime, description, calories);
         mockDB.getMEAL().put(meal.getId(), meal);
     }
 
@@ -46,9 +43,5 @@ public class MapMealDAOImpl implements MealDAO {
     @Override
     public Meal getMeal(int id) {
         return mockDB.getMEAL().get(id);
-    }
-
-    public AtomicInteger getInteger() {
-        return integer;
     }
 }
