@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MealDAO {
-    void createMeal(LocalDateTime dateTime, String description, int calories);
-    void updateMeal(int id, LocalDateTime dateTime, String description, int calories);
-    void deleteMeal(int id);
-    List<Meal> getMealList();
-    Meal getMeal(int id);
+    void update(int id, LocalDateTime dateTime, String description, int calories);
+    void delete(int id);
+    List<Meal> getList();
+    Meal get(int id);
+    Meal create(int id, LocalDateTime dateTime, String description, int calories);
 }

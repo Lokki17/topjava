@@ -4,6 +4,16 @@
 <%@ taglib prefix="fmt" uri="http://sargue.net/jsptags/time" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
+<style>
+    .green{
+        border-color: black;
+        color: green;
+    }
+    .red{
+        border-color: black;
+        color: red;
+    }
+</style>
 
 <html>
 <head>
@@ -24,7 +34,7 @@
     </tr>
     <c:if test="${!empty meals}">
         <c:forEach items="${meals}" var="meal">
-            <tr bgcolor="${meal.exceed ? 'red' : 'green'}">
+            <tr class="${meal.exceed ? 'red' : 'green'}">
                 <td><c:out value="${meal.id}"/></td>
                 <td><tags:localDate date="${meal.dateTime}"/></td>
                 <td><c:out value="${meal.description}"/></td>

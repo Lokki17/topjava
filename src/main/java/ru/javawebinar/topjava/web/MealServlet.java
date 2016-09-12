@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.dao.MapMealDAOImpl;
 import ru.javawebinar.topjava.dao.MealDAO;
 import ru.javawebinar.topjava.model.Meal;
@@ -16,29 +15,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger LOG = getLogger(UserServlet.class);
 
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     private MealDAO mealDAO = new MapMealDAOImpl();
 
     public MealServlet() {
-        //this.mealDAO = new MapMealDAOImpl();
     }
 
-    private static String MEALS_LIST = "/mealList.jsp";
-    private static String EDIT_MEAL = "/mealEdit.jsp";
-    private static String ADD_MEAL = "/mealAdd.jsp";
+    private final static String MEALS_LIST = "/mealList.jsp";
+    private final static String EDIT_MEAL = "/mealEdit.jsp";
+    private final static String ADD_MEAL = "/mealEdit.jsp";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("redirect to meals" + " ");
@@ -49,16 +43,16 @@ public class MealServlet extends HttpServlet {
         if ("edit".equalsIgnoreCase(action)){
             forward = EDIT_MEAL;
             int mealId = Integer.parseInt(request.getParameter("meal"));
-            Meal meal = mealDAO.getMeal(mealId);
+            Meal meal = mealDAO.get(mealId);
             request.setAttribute("meal", meal);
         } else if ("delete".equalsIgnoreCase(action)){
             int mealId = Integer.parseInt(request.getParameter("meal"));
-            mealDAO.deleteMeal(mealId);
+            mealDAO.delete(mealId);
         } else if ("add".equalsIgnoreCase(action)){
             forward = ADD_MEAL;
         }
 
-        List<Meal> list = mealDAO.getMealList();
+        List<Meal> list = mealDAO.getList();
 
         List<MealWithExceed> meals = MealsUtil.getFilteredWithExceeded(list, LocalTime.of(0, 0), LocalTime.of(23, 0), 2000);
 
@@ -76,13 +70,19 @@ public class MealServlet extends HttpServlet {
         String dateTimeStr = request.getParameter("dateTime");
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
-        LocalDateTime localDateTime = LocalDateTime.parse(dateTimeStr.replace("T", " "), formatter);
+        String date = "";
+        if (dateTimeStr.contains(".")){
+            date = dateTimeStr.substring(0, dateTimeStr.lastIndexOf(":"));
+        } else date = dateTimeStr;
+        LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
 
         if (create != null){
-            mealDAO.createMeal(localDateTime, description, calories);
+            int id = MapMealDAOImpl.getAtomicCount().get();
+            Meal meal = mealDAO.create(id, localDateTime, description, calories);
+            MockDB.getInstance().getMEAL().put(id, meal);
         } else {
             int id = Integer.parseInt(request.getParameter("id"));
-            mealDAO.updateMeal(id, localDateTime, description, calories);
+            mealDAO.update(id, localDateTime, description, calories);
         }
 
         doGet(request, response);
