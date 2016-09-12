@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class MealServlet extends HttpServlet {
 
         List<Meal> list = mealDAO.getList();
 
-        List<MealWithExceed> meals = MealsUtil.getFilteredWithExceeded(list, LocalTime.of(0, 0), LocalTime.of(23, 0), 2000);
+        List<MealWithExceed> meals = MealsUtil.getFilteredWithExceeded(list, LocalTime.MIN, LocalTime.MAX, 2000);
 
         request.setAttribute("meals", meals);
         request.getRequestDispatcher(forward).forward(request, response);
