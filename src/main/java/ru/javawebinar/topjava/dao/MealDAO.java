@@ -11,4 +11,5 @@ public interface MealDAO {
     List<Meal> getList();
     Meal get(int id);
     Meal create(int id, LocalDateTime dateTime, String description, int calories);
+    void put(int id, Meal meal);
 }

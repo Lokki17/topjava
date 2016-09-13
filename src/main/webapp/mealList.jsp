@@ -3,6 +3,7 @@
 <%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time" %>
 <%@ taglib prefix="fmt" uri="http://sargue.net/jsptags/time" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <style>
     .green{
@@ -36,7 +37,8 @@
         <c:forEach items="${meals}" var="meal">
             <tr class="${meal.exceed ? 'red' : 'green'}">
                 <td><c:out value="${meal.id}"/></td>
-                <td><tags:localDate date="${meal.dateTime}"/></td>
+                <%--<td><tags:localDate date="${meal.dateTime}"/></td>--%>
+                <td><c:out value="${fn:replace(meal.dateTime, 'T', ' ')}"/></td>
                 <td><c:out value="${meal.description}"/></td>
                 <td><c:out value="${meal.calories}"/></td>
                 <td>

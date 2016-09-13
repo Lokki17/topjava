@@ -5,7 +5,6 @@ import ru.javawebinar.topjava.dao.MapMealDAOImpl;
 import ru.javawebinar.topjava.dao.MealDAO;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
-import ru.javawebinar.topjava.repository.MockDB;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -32,8 +30,7 @@ public class MealServlet extends HttpServlet {
     }
 
     private final static String MEALS_LIST = "/mealList.jsp";
-    private final static String EDIT_MEAL = "/mealEdit.jsp";
-    private final static String ADD_MEAL = "/mealEdit.jsp";
+    private final static String EDIT_ADD_MEAL = "/mealEdit.jsp";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("redirect to meals" + " ");
@@ -42,7 +39,7 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("edit".equalsIgnoreCase(action)){
-            forward = EDIT_MEAL;
+            forward = EDIT_ADD_MEAL;
             int mealId = Integer.parseInt(request.getParameter("meal"));
             Meal meal = mealDAO.get(mealId);
             request.setAttribute("meal", meal);
@@ -50,7 +47,7 @@ public class MealServlet extends HttpServlet {
             int mealId = Integer.parseInt(request.getParameter("meal"));
             mealDAO.delete(mealId);
         } else if ("add".equalsIgnoreCase(action)){
-            forward = ADD_MEAL;
+            forward = EDIT_ADD_MEAL;
         }
 
         List<Meal> list = mealDAO.getList();
@@ -71,6 +68,7 @@ public class MealServlet extends HttpServlet {
         String dateTimeStr = request.getParameter("dateTime");
         String description = request.getParameter("description");
         int calories = Integer.parseInt(request.getParameter("calories"));
+
         String date = "";
         if (dateTimeStr.contains(".")){
             date = dateTimeStr.substring(0, dateTimeStr.lastIndexOf(":"));
@@ -80,7 +78,7 @@ public class MealServlet extends HttpServlet {
         if (create != null){
             int id = MapMealDAOImpl.getAtomicCount().get();
             Meal meal = mealDAO.create(id, localDateTime, description, calories);
-            MockDB.getInstance().getMEAL().put(id, meal);
+            mealDAO.put(id, meal);
         } else {
             int id = Integer.parseInt(request.getParameter("id"));
             mealDAO.update(id, localDateTime, description, calories);

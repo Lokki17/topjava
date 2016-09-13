@@ -1,52 +1,58 @@
 package ru.javawebinar.topjava.dao;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.repository.MockDB;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Month;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class MapMealDAOImpl implements MealDAO {
-    private static MockDB mockDB = MockDB.getInstance();
+
+    private static final Map<Integer, Meal> MEAL = new ConcurrentHashMap<>();
 
     private static AtomicInteger atomicCount;
 
     public MapMealDAOImpl() {
         if (atomicCount == null) {
             atomicCount = new AtomicInteger(0);
+            MEAL.put(atomicCount.get(), create(atomicCount.get(), LocalDateTime.of(2016, Month.MAY, 30, 13, 0), "Обед", 1000));
+            MEAL.put(atomicCount.get(), create(atomicCount.get(), LocalDateTime.of(2016, Month.MAY, 30, 20, 0), "Ужин", 500));
+            MEAL.put(atomicCount.get(), create(atomicCount.get(), LocalDateTime.of(2016, Month.MAY, 31, 10, 0), "Завтрак", 1000));
+            MEAL.put(atomicCount.get(), create(atomicCount.get(), LocalDateTime.of(2016, Month.MAY, 31, 13, 0), "Обед", 500));
+            MEAL.put(atomicCount.get(), create(atomicCount.get(), LocalDateTime.of(2016, Month.MAY, 31, 20, 0), "Ужин", 510));
         }
     }
 
     @Override
     public void update(int id, LocalDateTime dateTime, String description, int calories) {
-        Meal meal = mockDB.getMEAL().get(id);
+        Meal meal = MEAL.get(id);
         meal.setDateTime(dateTime);
         meal.setDescription(description);
         meal.setCalories(calories);
-        mockDB.getMEAL().put(id, meal);
+        MEAL.put(id, meal);
     }
 
     @Override
     public void delete(int id) {
-        mockDB.getMEAL().remove(id);
+        MEAL.remove(id);
         atomicCount.decrementAndGet();
         }
 
     @Override
     public List<Meal> getList() {
         List<Meal> result = new ArrayList<>();
-        for (Integer integer : mockDB.getMEAL().keySet()) {
-            result.add(mockDB.getMEAL().get(integer));
+        for (Integer integer : MEAL.keySet()) {
+            result.add(MEAL.get(integer));
         }
         return result;
     }
 
     @Override
     public Meal get(int id) {
-        return mockDB.getMEAL().get(id);
+        return MEAL.get(id);
     }
 
     @Override
@@ -54,6 +60,11 @@ public class MapMealDAOImpl implements MealDAO {
         Meal meal = new Meal(id, dateTime, description, calories);
         atomicCount.addAndGet(1);
         return meal;
+    }
+
+    @Override
+    public void put(int id, Meal meal) {
+        MEAL.put(id, meal);
     }
 
     public static AtomicInteger getAtomicCount() {
