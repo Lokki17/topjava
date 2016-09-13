@@ -30,7 +30,7 @@ public class MealServlet extends HttpServlet {
     }
 
     private final static String MEALS_LIST = "/mealList.jsp";
-    private final static String EDIT_ADD_MEAL = "/mealEdit.jsp";
+    private final static String ADD_EDIT_MEAL = "/mealAddEdit.jsp";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("redirect to meals" + " ");
@@ -39,7 +39,7 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         if ("edit".equalsIgnoreCase(action)){
-            forward = EDIT_ADD_MEAL;
+            forward = ADD_EDIT_MEAL;
             int mealId = Integer.parseInt(request.getParameter("meal"));
             Meal meal = mealDAO.get(mealId);
             request.setAttribute("meal", meal);
@@ -47,7 +47,7 @@ public class MealServlet extends HttpServlet {
             int mealId = Integer.parseInt(request.getParameter("meal"));
             mealDAO.delete(mealId);
         } else if ("add".equalsIgnoreCase(action)){
-            forward = EDIT_ADD_MEAL;
+            forward = ADD_EDIT_MEAL;
         }
 
         List<Meal> list = mealDAO.getList();

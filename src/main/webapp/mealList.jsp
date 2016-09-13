@@ -2,15 +2,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="javatime" uri="http://sargue.net/jsptags/time" %>
 <%@ taglib prefix="fmt" uri="http://sargue.net/jsptags/time" %>
-<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <style>
-    .green{
+    .green {
         border-color: black;
         color: green;
     }
-    .red{
+
+    .red {
         border-color: black;
         color: red;
     }
@@ -37,15 +37,22 @@
         <c:forEach items="${meals}" var="meal">
             <tr class="${meal.exceed ? 'red' : 'green'}">
                 <td><c:out value="${meal.id}"/></td>
-                <%--<td><tags:localDate date="${meal.dateTime}"/></td>--%>
                 <td><c:out value="${fn:replace(meal.dateTime, 'T', ' ')}"/></td>
                 <td><c:out value="${meal.description}"/></td>
                 <td><c:out value="${meal.calories}"/></td>
                 <td>
-                    <a href="mealEdit?action=edit&meal=${meal.id}">Edit</a>
+                    <c:url var="onEdit" value="meals">
+                        <c:param name="action" value="edit"/>
+                        <c:param name="meal" value="${meal.id}"/>
+                    </c:url>
+                    <a href="${onEdit}">Edit</a>
                 </td>
                 <td>
-                    <a href="meals?action=delete&meal=${meal.id}">Delete</a>
+                    <c:url var="onDelete" value="meals">
+                        <c:param name="action" value="delete"/>
+                        <c:param name="meal" value="${meal.id}"/>
+                    </c:url>
+                    <a href="${onDelete}">Delete</a>
                 </td>
             </tr>
         </c:forEach>

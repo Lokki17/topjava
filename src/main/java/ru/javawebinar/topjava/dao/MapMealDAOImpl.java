@@ -38,7 +38,6 @@ public class MapMealDAOImpl implements MealDAO {
     @Override
     public void delete(int id) {
         MEAL.remove(id);
-        atomicCount.decrementAndGet();
         }
 
     @Override
