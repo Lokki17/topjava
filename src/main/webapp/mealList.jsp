@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <style>
-    .green{
+/*    .green{
         border-color: black;
         color: green;
     }
@@ -13,23 +13,34 @@
         border-color: black;
         color: red;
     }
+    td{
+        text-align: center;
+        border: 2px solid lightgray;
+    }
+    table{
+        border-collapse:collapse;
+        border: 2px solid black;
+        text-align: center;
+    }*/
+
 </style>
 
 <html>
 <head>
     <title>Meal list</title>
+    <link href="resources/table.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <h2><a href="index.html">Home</a></h2>
 <h2>Meal list</h2>
-<table border="3px">
+<table>
     <tr>
-        <td width="20">id</td>
-        <td width="150">dateTime</td>
-        <td width="150">description</td>
-        <td width="70">calories</td>
-        <td width="50">edit</td>
-        <td width="50">delete</td>
+        <th width="20">id</th>
+        <th width="150">dateTime</th>
+        <th width="150">description</th>
+        <th width="70">calories</th>
+        <th width="50">edit</th>
+        <th width="50">delete</th>
     </tr>
 
     <c:if test="${!empty meals}">

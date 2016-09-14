@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>Edit Meal</title>
+    <link href="resources/table.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 
@@ -13,11 +14,11 @@
     <table border="3px">
         <tr>
             <c:if test="${!empty meal}">
-                <td width="20">id</td>
+                <th width="20">id</th>
             </c:if>
-            <td width="150">dateTime</td>
-            <td width="150">description</td>
-            <td width="70">calories</td>
+            <th width="150">dateTime</th>
+            <th width="150">description</th>
+            <th width="70">calories</th>
         </tr>
         <tr>
             <c:if test="${!empty meal}">

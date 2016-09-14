@@ -1,0 +1,19 @@
+.green{
+     border-color: black;
+     color: green;
+ }
+.red{
+    border-color: black;
+    color: red;
+}
+td{
+    border-top: 2px solid lightgray;
+}
+th{
+    border: 2px solid black;
+}
+table{
+    border-collapse:collapse;
+    border: 2px solid black;
+    text-align: center;
+}
