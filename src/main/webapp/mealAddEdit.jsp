@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <html>
 <head>
@@ -20,24 +19,23 @@
             <td width="150">description</td>
             <td width="70">calories</td>
         </tr>
-        <c:if test="${!empty meal}">
-            <tr>
+        <tr>
+            <c:if test="${!empty meal}">
                 <td><input name="id" value="${meal.id}" width="20" title="id" readonly/></td>
-                <td><input name="dateTime" type="datetime-local" value="${meal.dateTime}" title="dateTime"></td>
-                <td><input name="description" type="text" value="${meal.description}" title="description"></td>
-                <td><input name="calories" type="text" value="${meal.calories}" title="calories"/></td>
-            </tr>
-        </c:if>
+
+            </c:if>
+            <td><input name="dateTime" type="datetime-local" value="${meal.dateTime}" title="please, enter Date and Time"></td>
+            <td><input name="description" type="text" value="${!empty meal ? meal.description : "sample"}"
+                       title="please, enter description"></td>
+            <td><input name="calories" type="text" value="${!empty meal ? meal.calories : "0"}" title="please, enter calories"/></td>
+        </tr>
         <c:if test="${empty meal}">
             <tr>
-                <td><input name="dateTime" type="datetime-local" title="dateTime"></td>
-                <td><input name="description" type="text" value="exemple" title="description"></td>
-                <td><input name="calories" type="text" value="0" title="calories"/></td>
-                <td><input name="create" type="text" title="create" value="create" hidden></td>
+                <td><input name="create" type="text" value="create" hidden></td>
             </tr>
         </c:if>
     </table>
-    <input type="submit" value="Edit/Add">
+    <input type="submit" value="Edit/Add" title="Press the button to Add/Create meal">
 </form>
 
 </body>

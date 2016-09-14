@@ -76,12 +76,10 @@ public class MealServlet extends HttpServlet {
         LocalDateTime localDateTime = LocalDateTime.parse(date, formatter);
 
         if (create != null){
-            int id = MapMealDAOImpl.getAtomicCount().get();
-            Meal meal = mealDAO.create(id, localDateTime, description, calories);
-            mealDAO.put(id, meal);
+            mealDAO.create(localDateTime, description, calories);
         } else {
             int id = Integer.parseInt(request.getParameter("id"));
-            mealDAO.update(id, localDateTime, description, calories);
+            mealDAO.update(new Meal(id, localDateTime, description, calories));
         }
 
         doGet(request, response);

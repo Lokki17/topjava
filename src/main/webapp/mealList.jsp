@@ -5,12 +5,11 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <style>
-    .green {
+    .green{
         border-color: black;
         color: green;
     }
-
-    .red {
+    .red{
         border-color: black;
         color: red;
     }
@@ -23,7 +22,6 @@
 <body>
 <h2><a href="index.html">Home</a></h2>
 <h2>Meal list</h2>
-
 <table border="3px">
     <tr>
         <td width="20">id</td>
@@ -33,21 +31,22 @@
         <td width="50">edit</td>
         <td width="50">delete</td>
     </tr>
+
     <c:if test="${!empty meals}">
         <c:forEach items="${meals}" var="meal">
             <tr class="${meal.exceed ? 'red' : 'green'}">
-                <td><c:out value="${meal.id}"/></td>
-                <td><c:out value="${fn:replace(meal.dateTime, 'T', ' ')}"/></td>
-                <td><c:out value="${meal.description}"/></td>
-                <td><c:out value="${meal.calories}"/></td>
-                <td>
+                <td title="id of meal"><c:out value="${meal.id}"/></td>
+                <td title="Date and Time of meal"><c:out value="${fn:replace(meal.dateTime, 'T', ' ')}"/></td>
+                <td title="Description of meal"><c:out value="${meal.description}"/></td>
+                <td title="Calories of meal"><c:out value="${meal.calories}"/></td>
+                <td title="Edit meal">
                     <c:url var="onEdit" value="meals">
                         <c:param name="action" value="edit"/>
                         <c:param name="meal" value="${meal.id}"/>
                     </c:url>
                     <a href="${onEdit}">Edit</a>
                 </td>
-                <td>
+                <td title="Delete meal">
                     <c:url var="onDelete" value="meals">
                         <c:param name="action" value="delete"/>
                         <c:param name="meal" value="${meal.id}"/>

@@ -13,26 +13,19 @@ public class MapMealDAOImpl implements MealDAO {
 
     private static final Map<Integer, Meal> MEAL = new ConcurrentHashMap<>();
 
-    private static AtomicInteger atomicCount;
+    private static AtomicInteger atomicCount = new AtomicInteger();
 
     public MapMealDAOImpl() {
-        if (atomicCount == null) {
-            atomicCount = new AtomicInteger(0);
-            MEAL.put(atomicCount.get(), create(atomicCount.get(), LocalDateTime.of(2016, Month.MAY, 30, 13, 0), "Обед", 1000));
-            MEAL.put(atomicCount.get(), create(atomicCount.get(), LocalDateTime.of(2016, Month.MAY, 30, 20, 0), "Ужин", 500));
-            MEAL.put(atomicCount.get(), create(atomicCount.get(), LocalDateTime.of(2016, Month.MAY, 31, 10, 0), "Завтрак", 1000));
-            MEAL.put(atomicCount.get(), create(atomicCount.get(), LocalDateTime.of(2016, Month.MAY, 31, 13, 0), "Обед", 500));
-            MEAL.put(atomicCount.get(), create(atomicCount.get(), LocalDateTime.of(2016, Month.MAY, 31, 20, 0), "Ужин", 510));
-        }
+            MEAL.put(atomicCount.get(), create(LocalDateTime.of(2016, Month.MAY, 30, 13, 0), "Обед", 1000));
+            MEAL.put(atomicCount.get(), create(LocalDateTime.of(2016, Month.MAY, 30, 20, 0), "Ужин", 500));
+            MEAL.put(atomicCount.get(), create(LocalDateTime.of(2016, Month.MAY, 31, 10, 0), "Завтрак", 1000));
+            MEAL.put(atomicCount.get(), create(LocalDateTime.of(2016, Month.MAY, 31, 13, 0), "Обед", 500));
+            MEAL.put(atomicCount.get(), create(LocalDateTime.of(2016, Month.MAY, 31, 20, 0), "Ужин", 510));
     }
 
     @Override
-    public void update(int id, LocalDateTime dateTime, String description, int calories) {
-        Meal meal = MEAL.get(id);
-        meal.setDateTime(dateTime);
-        meal.setDescription(description);
-        meal.setCalories(calories);
-        MEAL.put(id, meal);
+    public void update(Meal meal) {
+        MEAL.put(meal.getId(), meal);
     }
 
     @Override
@@ -42,11 +35,7 @@ public class MapMealDAOImpl implements MealDAO {
 
     @Override
     public List<Meal> getList() {
-        List<Meal> result = new ArrayList<>();
-        for (Integer integer : MEAL.keySet()) {
-            result.add(MEAL.get(integer));
-        }
-        return result;
+        return new ArrayList<>(MEAL.values());
     }
 
     @Override
@@ -55,18 +44,10 @@ public class MapMealDAOImpl implements MealDAO {
     }
 
     @Override
-    public Meal create(int id, LocalDateTime dateTime, String description, int calories) {
-        Meal meal = new Meal(id, dateTime, description, calories);
-        atomicCount.addAndGet(1);
+    public Meal create(LocalDateTime dateTime, String description, int calories) {
+        Meal meal = new Meal(atomicCount.get(), dateTime, description, calories);
+        MEAL.put(meal.getId(), meal);
+        atomicCount.incrementAndGet();
         return meal;
-    }
-
-    @Override
-    public void put(int id, Meal meal) {
-        MEAL.put(id, meal);
-    }
-
-    public static AtomicInteger getAtomicCount() {
-        return atomicCount;
     }
 }
